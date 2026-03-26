@@ -9,7 +9,7 @@ cask "gstreamer-runtime" do
 
   livecheck do
     url "https://gstreamer.freedesktop.org/data/pkg/osx/"
-    regex(%r{href=["']?v?(\d+(?:\.\d+)+)/?["' >]}i)
+    regex(%r{href=["']?v?(\d+\.(?:\d*[02468])(?:\.\d+)*)/?["' >]}i)
   end
 
   depends_on macos: ">= :catalina"

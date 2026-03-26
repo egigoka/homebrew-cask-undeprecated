@@ -8,8 +8,8 @@ cask "macupdater" do
   homepage "https://www.corecode.io/macupdater/index.html"
 
   livecheck do
-    url "https://www.corecode.io/macupdater/history.html"
-    regex(/macupdater[._-]v?(\d+(?:\.\d+)+)\.dmg/i)
+    url "https://www.corecode.io/macupdater/history3.html"
+    regex(/<b>(\d+(?:\.\d+)+)<\/b>/i)
   end
 
   depends_on macos: ">= :monterey"

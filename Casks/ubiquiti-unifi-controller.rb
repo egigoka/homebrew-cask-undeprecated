@@ -11,7 +11,9 @@ cask "ubiquiti-unifi-controller" do
   livecheck do
     url "https://fw-update.ubnt.com/api/firmware-latest?filter=eq~~product~~unifi-controller&filter=eq~~channel~~release&filter=eq~~platform~~macos"
     strategy :json do |json|
-      json.dig("_embedded", "firmware")&.map { |fw| fw["version"] }
+      json.dig("_embedded", "firmware")&.map do |fw|
+        "#{fw["version_major"]}.#{fw["version_minor"]}.#{fw["version_patch"]}"
+      end
     end
   end
 

@@ -1,16 +1,8 @@
 cask "ubports-installer" do
-  arch arm: "arm64", intel: "x64"
-
   version "0.11.2"
+  sha256 "cd5532fff5c2a35e04f55b6b0ad03918404bfbaa1065e54a87cf9fb69609807b"
 
-  on_arm do
-    sha256 "21f40396f8f8d1b0da9b3b7b029cd6d15988603c64cdfceb5d9ba1eb4232cd3c"
-  end
-  on_intel do
-    sha256 "cd5532fff5c2a35e04f55b6b0ad03918404bfbaa1065e54a87cf9fb69609807b"
-  end
-
-  url "https://github.com/ubports/ubports-installer/releases/download/#{version}/ubports-installer_#{version}_mac_#{arch}.dmg",
+  url "https://github.com/ubports/ubports-installer/releases/download/#{version}/ubports-installer_#{version}_mac_x64.dmg",
       verified: "github.com/ubports/ubports-installer/"
   name "ubports installer"
   desc "Application to install ubports on mobile devices"

@@ -71,12 +71,38 @@ jobs:
             else
               # Handle arch-specific sha256 (on_arm/on_intel blocks)
               if grep -q 'on_arm' "$cask_file"; then
-                # ARM URL
-                arm_url=$(echo "$urls" | head -1 | sed "s/#{version}/$latest_version/g;s/#{arch}/arm64/g")
+                # Resolve URLs using Ruby to handle all interpolation patterns
+                read -r arm_url intel_url <<< "$(ruby -e '
+                  version = ARGV[0]
+                  csv = version.split(",")
+                  lines = File.readlines(ARGV[1])
+                  in_arm = false; in_intel = false
+                  arm_url = ""; intel_url = ""
+                  lines.each do |line|
+                    in_arm = true if line =~ /on_arm do/
+                    in_intel = true if line =~ /on_intel do/
+                    if line =~ /url "([^"]+)"/
+                      raw = $1
+                      resolved = raw
+                        .gsub("#{version}", version)
+                        .gsub("#{version.csv.first}", csv[0].to_s)
+                        .gsub("#{version.csv.second}", csv[1].to_s)
+                        .gsub("#{version.csv.third}", csv[2].to_s)
+                      if in_arm && arm_url.empty?
+                        arm_url = resolved
+                      elsif in_intel && intel_url.empty?
+                        intel_url = resolved
+                      end
+                    end
+                    in_arm = false if in_arm && line =~ /^\s+end/
+                    in_intel = false if in_intel && line =~ /^\s+end/
+                  end
+                  puts "#{arm_url} #{intel_url}"
+                ' "$latest_version" "$cask_file")"
+
                 echo "Downloading ARM: $arm_url"
                 arm_sha=$(curl -fsSL "$arm_url" | shasum -a 256 | awk '{print $1}')
                 if [ -n "$arm_sha" ] && [ "$arm_sha" != "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" ]; then
-                  # Update ARM sha256 (the one after on_arm do)
                   ruby -i -e '
                     lines = File.readlines(ARGV[0])
                     in_arm = false
@@ -92,8 +118,6 @@ jobs:
                   ' "$cask_file"
                 fi
 
-                # Intel URL
-                intel_url=$(echo "$urls" | head -1 | sed "s/#{version}/$latest_version/g;s/#{arch}/x64/g")
                 echo "Downloading Intel: $intel_url"
                 intel_sha=$(curl -fsSL "$intel_url" | shasum -a 256 | awk '{print $1}')
                 if [ -n "$intel_sha" ] && [ "$intel_sha" != "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" ]; then
@@ -113,7 +137,12 @@ jobs:
                 fi
               else
                 # Single URL - resolve Ruby interpolation
-                resolved_url=$(echo "$urls" | head -1 | sed "s/#{version}/$latest_version/g;s/#{sha256}//g")
+                csv_parts=(${latest_version//,/ })
+                resolved_url=$(echo "$urls" | head -1 | \
+                  sed "s/#{version.csv.first}/${csv_parts[0]:-}/g" | \
+                  sed "s/#{version.csv.second}/${csv_parts[1]:-}/g" | \
+                  sed "s/#{version}/$latest_version/g" | \
+                  sed "s/#{sha256}//g")
 
                 # For checkra1n, URL contains sha256 - download to temp and compute
                 echo "Downloading: $resolved_url"

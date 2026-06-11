@@ -13,9 +13,8 @@ cask "openemu" do
     strategy :github_latest
   end
 
-  depends_on macos: ">= :catalina"
-
   auto_updates true
+  depends_on macos: :catalina
 
   app "OpenEmu.app"
 

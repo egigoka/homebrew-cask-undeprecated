@@ -9,19 +9,18 @@ cask "macupdater" do
 
   livecheck do
     url "https://www.corecode.io/macupdater/history3.html"
-    regex(/<b>(\d+(?:\.\d+)+)<\/b>/i)
+    regex(%r{<b>(\d+(?:\.\d+)+)</b>}i)
   end
 
-  depends_on macos: ">= :monterey"
-
   auto_updates true
-
-  uninstall launchctl: "com.corecode.MacUpdaterLaunchHelper",
-            quit:      "com.corecode.MacUpdater"
+  depends_on macos: :monterey
 
   app "MacUpdater.app"
   binary "#{appdir}/MacUpdater.app/Contents/Resources/macupdater_install"
   binary "#{appdir}/MacUpdater.app/Contents/Resources/macupdater_client"
+
+  uninstall launchctl: "com.corecode.MacUpdaterLaunchHelper",
+            quit:      "com.corecode.MacUpdater"
 
   zap trash: [
     "~/Library/Application Scripts/com.corecode.MacUpdaterLaunchHelper",

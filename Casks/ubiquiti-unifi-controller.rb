@@ -17,11 +17,11 @@ cask "ubiquiti-unifi-controller" do
     end
   end
 
-  depends_on macos: ">= :catalina"
-
-  uninstall signal: ["TERM", "com.ubnt.UniFi"]
+  depends_on macos: :catalina
 
   app "UniFi.app"
+
+  uninstall signal: ["TERM", "com.ubnt.UniFi"]
 
   zap trash: [
     "~/Library/Application Support/UniFi",

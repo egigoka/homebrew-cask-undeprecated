@@ -26,7 +26,7 @@ cask "mpv" do
     end
   end
 
-  depends_on macos: ">= :ventura"
+  depends_on macos: :ventura
 
   app "mpv.app"
 

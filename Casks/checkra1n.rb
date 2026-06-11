@@ -12,7 +12,7 @@ cask "checkra1n" do
     regex(/checkra1n%20beta%20(\d+(?:\.\d+)+)\.dmg/i)
   end
 
-  depends_on macos: ">= :catalina"
+  depends_on macos: :catalina
 
   app "checkra1n.app"
   binary "#{appdir}/checkra1n.app/Contents/MacOS/checkra1n"

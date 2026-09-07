@@ -4,14 +4,12 @@ cask "mpv" do
   on_arm do
     sha256 "28fa00ade7cf799e852debf70b9998dacd763b7f1e1fb3b189018dab5664a508"
 
-    url "https://nightly.link/mpv-player/mpv/workflows/build/master/mpv-v#{version.csv.first}-#{version.csv.second}-macos-15-arm.zip",
-        verified: "nightly.link/mpv-player/mpv/"
+    url "https://nightly.link/mpv-player/mpv/workflows/build/master/mpv-v#{version.csv.first}-#{version.csv.second}-macos-15-arm.zip"
   end
   on_intel do
     sha256 "a3f847f740df84da58f8b0f787d9e075059d18f98ca4abaea918ee4ff69d3c51"
 
-    url "https://nightly.link/mpv-player/mpv/workflows/build/master/mpv-v#{version.csv.first}-#{version.csv.second}-macos-15-intel.zip",
-        verified: "nightly.link/mpv-player/mpv/"
+    url "https://nightly.link/mpv-player/mpv/workflows/build/master/mpv-v#{version.csv.first}-#{version.csv.second}-macos-15-intel.zip"
   end
 
   name "mpv"

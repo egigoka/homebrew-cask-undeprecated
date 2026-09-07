@@ -12,8 +12,6 @@ cask "gstreamer-runtime" do
     regex(%r{href=["']?v?(\d+\.(?:\d*[02468])(?:\.\d+)*)/?["' >]}i)
   end
 
-  depends_on macos: :catalina
-
   pkg "gstreamer-1.0-#{version}-universal.pkg"
 
   uninstall pkgutil: [

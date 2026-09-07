@@ -17,8 +17,6 @@ cask "ubiquiti-unifi-controller" do
     end
   end
 
-  depends_on macos: :catalina
-
   app "UniFi.app"
 
   uninstall signal: ["TERM", "com.ubnt.UniFi"]
